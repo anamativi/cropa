@@ -1,23 +1,28 @@
 import sys
+import time
+import os
 
-#Entradas: video, res, w, h, nF
+#Entradas: video, w, h, nF
 
 video = sys.argv[1]
-res = sys.argv[2]
-w = int(sys.argv[3])
-h = int(sys.argv[4])
-nF = int(sys.argv[5])
-out = "../../Results/cropa_"
+w = int(sys.argv[2])
+h = int(sys.argv[3])
+nF = int(sys.argv[4])
+
 name = video.split("_")
 name = name[0]
+newRes = str(w) + "x" + str(h)
+out = time.strftime("%y_%m") + "/" + time.strftime("%d")
+os.system("mkdir --p " + out) #creates results folder, if it insnt there already
+r = open(out + "/" + "cropa_" + name + "_" + newRes + ".yuv", 'wb')
 
-def cropa(seq, res, w, h, nF):
-	newRes = str(w) + "x" + str(h)
+def cropa(seq, w, h, nF):
+	size = seq.split("_")
+	size = size[1].split("x")
+	oldW = int(size[0])
+	oldH = int(size[1])
+	
 	f = open("../../origCfP/" + seq + ".yuv", 'rb')
-	r = open(out + name + "_" + newRes + ".yuv", 'wb')
-	res = res.split('x')
-	oldW = int(res[0])
-	oldH = int(res[1])
 	leC = w/2
 	lixoY = oldW - w
 	lixoC = oldW/2 - leC
@@ -50,4 +55,4 @@ def cropa(seq, res, w, h, nF):
 	f.close()
 	r.close()
 
-cropa(video, res, w, h, nF)
+cropa(video, w, h, nF)
